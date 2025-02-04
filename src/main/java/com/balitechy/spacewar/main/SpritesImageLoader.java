@@ -1,26 +1,37 @@
 package com.balitechy.spacewar.main;
 
 import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
-
 public class SpritesImageLoader {
-	
-	private String path;
-	private BufferedImage image;
-	
-	public SpritesImageLoader(String path){
-		this.path = path;
+	private BufferedImage spriteSheet;
+
+	public SpritesImageLoader(String path) {
+		try {
+			spriteSheet = ImageIO.read(getClass().getResource(path));
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
 	}
-	
-	public BufferedImage loadImage() throws IOException{
-		image = ImageIO.read(getClass().getResource(path));
-		return image;
+
+	// Método para recortar imágenes desde la hoja de sprites
+	public BufferedImage getImage(int x, int y, int width, int height) {
+		// Validar si las coordenadas están dentro del tamaño de la hoja de sprites
+		if (x + width > spriteSheet.getWidth() || y + height > spriteSheet.getHeight()) {
+			throw new IllegalArgumentException(
+					"Las coordenadas y dimensiones exceden el tamaño de la hoja de sprites: " +
+							"x=" + x + ", y=" + y + ", width=" + width + ", height=" + height +
+							", spriteSheetWidth=" + spriteSheet.getWidth() +
+							", spriteSheetHeight=" + spriteSheet.getHeight()
+			);
+		}
+		return spriteSheet.getSubimage(x, y, width, height);
 	}
-	
-	public BufferedImage getImage(int top, int left, int width, int height){
-		BufferedImage img = image.getSubimage(top, left, width, height);
-		return img;
+
+	// Método para obtener toda la hoja de sprites
+	public BufferedImage getFullImage() {
+		return spriteSheet;
 	}
 }

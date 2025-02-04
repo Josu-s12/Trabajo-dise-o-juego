@@ -1,31 +1,24 @@
 package com.balitechy.spacewar.main;
 
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 
-public class Bullet {
-	
-	private double x;
-	private double y;
-	public static final int WIDTH = 11;
-	public static final int HEIGHT = 21;
-	private BufferedImage image;
-	
-	public Bullet(double x, double y, Game game){
+public abstract class Bullet { // ✅ Clase abstracta para las balas
+	protected int x, y;
+	protected int speed = 5; // Velocidad de la bala
+
+	public Bullet(int x, int y) {
 		this.x = x;
 		this.y = y;
-		image = game.getSprites().getImage(35, 52, WIDTH, HEIGHT);
 	}
-	
-	public void tick(){
-		y -= 5;
+
+	public abstract void render(Graphics g);
+
+	// ✅ Agregar método update() para mover la bala
+	public void update() {
+		y -= speed; // Mueve la bala hacia arriba
 	}
-	
-	public void render(Graphics g){
-		g.drawImage(image, (int) x, (int) y, null);
-	}
-	
-	public double getY(){
+
+	public int getY() {
 		return y;
 	}
 }
